@@ -10,7 +10,6 @@ on:
 env:
   AZURE_CONTAINER_REGISTRY: $
   AZURE_APP_SERVICE_NAME: $
-  AZURE_RESOURCE_GROUP: $
   IMAGE_NAME: chat-app
 
 jobs:
