@@ -2,8 +2,7 @@ name: Deploy to Azure Container Registry
 
 on:
   push:
-    branches:
-      - main
+    branches: ["main"]
     paths:
       - 'src/**'
 
