@@ -39,7 +39,8 @@ jobs:
         with:
             creds: ${{ secrets.SPN }}
 
+      - name: Change directory to app
+        run: cd app/
+
       - name: Run customer loyalty agent initializer
-        run: |
-          cd app/
-          python app/agents/customerLoyaltyAgent_initializer.py
+        run: python app/agents/customerLoyaltyAgent_initializer.py
