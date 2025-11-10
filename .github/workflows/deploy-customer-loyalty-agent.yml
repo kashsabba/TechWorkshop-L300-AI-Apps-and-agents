@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v4
 
       - name: Create .env file from secret
         run: 'echo "$ENV" > src/.env'
@@ -40,7 +40,7 @@ jobs:
             creds: ${{ secrets.SPN }}
 
       - name: Change directory to app
-        run: cd app/
+        run: cd src/
 
       - name: Run customer loyalty agent initializer
         run: python app/agents/customerLoyaltyAgent_initializer.py
