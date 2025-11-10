@@ -22,7 +22,7 @@ jobs:
         run: 'echo "$ENV" > src/.env'
         shell: bash
         env:
-          ENV: $
+          ENV: ${{ secrets.ENV }}
 
       - name: Set up Python
         uses: actions/setup-python@v5
