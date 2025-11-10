@@ -37,7 +37,7 @@ jobs:
       - name: Login via Azure CLI
         uses: azure/login@v2.1.1
         with:
-            creds: $
+            creds: ${{ secrets.SPN }}
 
       - name: Run customer loyalty agent initializer
         run: |
