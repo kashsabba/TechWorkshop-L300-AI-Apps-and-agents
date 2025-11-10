@@ -21,7 +21,7 @@ jobs:
         run: 'echo "$ENV" > src/.env'
         shell: bash
         env:
-          ENV: $
+          ENV: ${{ secrets.ENV }}
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -36,9 +36,9 @@ jobs:
       - name: Login via Azure CLI
         uses: azure/login@v2.1.1
         with:
-            creds: $
+            creds: ${{ secrets.SPN }}
 
       - name: Run shopper agent initializer
         run: |
-          cd app/
+          cd src/
           python app/agents/shopperAgent_initializer.py
