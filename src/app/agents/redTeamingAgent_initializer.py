@@ -26,6 +26,9 @@ chat_target = OpenAIChatTarget(
 ) 
 
 async def main():
+    red_team_result = await red_team_agent.scan(target=chat_target)
+'''
+async def main():
     red_team_result = await red_team_agent.scan(
         target=chat_target,
         scan_name="Red Team Scan - Easy-Moderate Strategies",
@@ -36,5 +39,5 @@ async def main():
             AttackStrategy.AnsiAttack,
             AttackStrategy.Tense
         ])
-
+'''
 asyncio.run(main())
