@@ -1,47 +1,39 @@
-# Workflow: build image from src/ and push to Azure Container Registry
 on:
   push:
     branches:
       - main
+    paths:
+      - 'src/**'
+  # Allows you to run this workflow manually from the Actions tab
+  # workflow_dispatch:
+
+env:
+  AZURE_CONTAINER_REGISTRY: ${{ secrets.ACR_REGISTRY }}
+  IMAGE_NAME: chat-app
 
 jobs:
-  build-and-push:
+  build-and-deploy:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Create env file from secret (runner only, not committed)
+      - name: Create .env file from secret
+        run: 'echo "$ENV" > src/.env'
+        shell: bash
         env:
-          ENV_CONTENT: ${{ secrets.ENV }}
-        run: |
-          # write secret to a file on the runner without printing it to logs
-          printf '%s' "$ENV_CONTENT" > envfile
-          chmod 600 envfile
+          ENV: ${{ secrets.ENV }}
 
       - name: Log in to Azure Container Registry
-        uses: docker/login-action@v2
+        uses: azure/docker-login@v1
         with:
-          registry: ${{ secrets.ACR_REGISTRY }}      # e.g. myregistry.azurecr.io
-          username: ${{ secrets.ACR_USERNAME }}      # ACR username (or service principal client id)
-          password: ${{ secrets.ACR_PASSWORD }}      # ACR password (or service principal secret)
+          login-server: ${{ secrets.ACR_REGISTRY }}
+          username: ${{ secrets.ACR_USERNAME }}
+          password: ${{ secrets.ACR_PASSWORD }}
 
-      - name: Build (context = src/) and push image to ACR
-        uses: docker/build-push-action@v5
-        with:
-          context: ./src
-          file: ./src
-          push: true
-          # customize repo/name as needed; using both latest and commit sha tags
-          tags: |
-            ${{ secrets.ACR_REGISTRY }}/chat-app:latest
-            ${{ secrets.ACR_REGISTRY }}/chat-app:${{ github.sha }}
-          # pass the envfile to BuildKit as a secret; 
-          # Dockerfile uses this secret to create .env inside the image
-          secrets: |
-            id=env,src=envfile
-
-      - name: Remove local env file from runner
+      - name: Build and push Docker image
         run: |
-          # try to securely remove the file; fallback to rm -f
-          shred -u envfile || rm -f envfile
+          cd src/
+          docker build -t ${{ env.AZURE_CONTAINER_REGISTRY }}/${{ env.IMAGE_NAME }}:latest .
+          docker push ${{ env.AZURE_CONTAINER_REGISTRY }}/${{ env.IMAGE_NAME }}:latest
