@@ -7,10 +7,6 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-env:
-  AZURE_CONTAINER_REGISTRY: ${{ secrets.ACR_REGISTRY }}
-  IMAGE_NAME: chat-app
-
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -35,5 +31,5 @@ jobs:
       - name: Build and push Docker image
         run: |
           cd src/
-          docker build -t ${{ env.AZURE_CONTAINER_REGISTRY }}/${{ env.IMAGE_NAME }}:latest .
-          docker push ${{ env.AZURE_CONTAINER_REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+          docker build -t ${{ secrets.ACR_REGISTRY }}/chat-app:latest .
+          docker push ${{ secrets.ACR_REGISTRY }}/chat-app:latest
