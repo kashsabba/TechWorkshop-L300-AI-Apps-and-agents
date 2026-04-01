@@ -36,7 +36,8 @@ jobs:
           tags: |
             ${{ secrets.ACR_REGISTRY }}/chat-app:latest
             ${{ secrets.ACR_REGISTRY }}/chat-app:${{ github.sha }}
-          # pass the envfile to BuildKit as a secret; Dockerfile uses this secret to create .env inside the image
+          # pass the envfile to BuildKit as a secret; 
+          # Dockerfile uses this secret to create .env inside the image
           secrets: |
             id=env,src=envfile
 
