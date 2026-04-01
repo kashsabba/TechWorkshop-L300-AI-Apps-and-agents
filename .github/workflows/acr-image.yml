@@ -30,12 +30,12 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: ./src
-          file: ./src/Dockerfile
+          file: ./src
           push: true
           # customize repo/name as needed; using both latest and commit sha tags
           tags: |
-            ${{ secrets.ACR_REGISTRY }}/my-app:latest
-            ${{ secrets.ACR_REGISTRY }}/my-app:${{ github.sha }}
+            ${{ secrets.ACR_REGISTRY }}/chat-app:latest
+            ${{ secrets.ACR_REGISTRY }}/chat-app:${{ github.sha }}
           # pass the envfile to BuildKit as a secret; Dockerfile uses this secret to create .env inside the image
           secrets: |
             id=env,src=envfile
